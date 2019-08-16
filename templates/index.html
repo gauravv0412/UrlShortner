@@ -2,34 +2,78 @@
 
 {% block content %}
 <div class="row pt-5">
-    <div class="col-2"></div>
-<div class="col-8">
 
-<div class="card" style="width: 30rem;">
-        <div class="card-body">
-            <form method = "POST" action = "">
-                {% csrf_token %}
-                <div class="form-group">
-                    <!-- <label for="InputUrl">Enter url to shorten it</label>
-                        <input name = 'url' type="url" class="form-control" id="url" aria-describedby="urlHelp" placeholder="It is should be starting with 'https://' or 'http://'"> -->
-                        <h5>Enter URL</h5>
-                        {{form.url}}
-                        <div class="bd-clipboard"><button type="button" class="btn-clipboard" title="" data-original-title="Copy to clipboard">Copy</button></div>
+    <div class="col-2"></div>
+
+    <div class="col-8">
+
+        <div class="card lg" style="width: 50rem;">
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_actual_url">
+                            <h1>Paste the URL to be shortened</h1>
+                            <span style="color: red">{% for error in form.errors.actual_url %}
+                                *{{error}}
+                                {% endfor %}
+                            </span>
+                        </label>
+                        {{form.actual_url}}
+                        <p class="text-muted">Only http and https links are allowed</p>
                     </div>
-                    {{form.errors}}
-                    <button type="submit" class="btn btn-primary">get shortened url</button>
+                    <div class="form-group">
+                        <label for="id_shortened_url">
+                            <h4>Enter custom ShortUrl here(optional)</h4>
+                            <span style="color: red">{% for error in form.errors.shortened_url %}
+                                *{{error}}
+                                {% endfor %}
+                            </span>
+                        </label>
+                        {{form.shortened_url}}
+                        <p class="text-muted">Leave empty to generate random ShortUrl</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_is_private">
+                            Make it a private url? <small class="text-muted">(Login Required)</small>
+                        </label>
+                        {{form.is_private}}
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Get ShortURL</button>
+                    </div>
+                    {% if form.errors.non_field_errors %}
+                    <div class = "form-group">
+                        <span style="color: red">{% for error in form.non_field_errors %}
+                            *{{error}}
+                            {% endfor %}</span>
+                    </div>
+                    {% endif %}
+                    {% if short_url and not form.errors%}
+                    <div class = "form-group">
+                        <input type="text" readonly class="form-control-plaintext" id="id_short_url"
+                            onclick="this.select()" value={{short_url}}>
+                        {% if request.method == 'POST' %}
+                            <button class = "btn btn-outline-warning" type="button" onclick='func("id_short_url")'> copy</button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </form>
             </div>
         </div>
     </div>
 </div>
-        
-<!-- <form method = 'POST'>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Enter url to shorten it</label>
-        <input name = 'url' type="url" class="form-control" id="url" aria-describedby="urlHelp" placeholder="Url">
-    </div>
-    <button type="submit" class="btn btn-primary">get shortened url</button>
-</form> -->
+
+<script>
+    function func(id) {
+        var copyText = document.getElementById(id);
+        copyText.select();
+        document.execCommand("copy");
+        // alert("Copied the text: " + copyText.value);
+
+    }
+</script>
 
 {% endblock %}
