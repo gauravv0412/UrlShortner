@@ -3,7 +3,10 @@ from django.http import HttpResponse
 from main import models
 from django.contrib.auth.decorators import login_required
 from main.forms import Urlform
+from django.conf import settings
 import random
+
+my_domain = settings.MY_DOMAIN
 
 # Create your views here.
 @login_required
@@ -65,7 +68,7 @@ def get_url(request):
                     model.shortened_url = short_url
                     model.actual_url = urlform.cleaned_data['actual_url']
                     model.is_private = urlform.cleaned_data['is_private']
-                    context['short_url']= 'localhost:8000/' + short_url
+                    context['short_url']= my_domain + short_url
                     model.save()
             else: 
                 short_url = generate_random()
@@ -78,7 +81,7 @@ def get_url(request):
                 model.shortened_url = short_url
                 model.actual_url = urlform.cleaned_data['actual_url']
                 model.is_private = urlform.cleaned_data['is_private']
-                context['short_url']= 'localhost:8000/' + short_url
+                context['short_url']= my_domain + '/' + short_url
                 model.save()
     
     context['form'] = urlform

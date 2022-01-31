@@ -1,6 +1,9 @@
 from django import forms
+from django.conf import settings
 
 from main import models
+
+my_domain = settings.MY_DOMAIN
 
 class Urlform(forms.ModelForm):
     class Meta :
@@ -13,7 +16,7 @@ class Urlform(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
-            'shortened_url': forms.TextInput(attrs={'placeholder': "localhost:8000/_____", 'class': 'form-control',}),
+            'shortened_url': forms.TextInput(attrs={'placeholder': my_domain + "/_____", 'class': 'form-control',}),
         }
         error_messages = {
             'shortened_url': {
